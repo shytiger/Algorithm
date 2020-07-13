@@ -229,10 +229,6 @@ namespace SortTestHelper{
 	}
 
 
-	template<typename T>
-	void mergeSort(T arr[],int n){
-		__mergeSort(arr,0,n-1);
-	}
 
 	template<typename T>
 	void __merge(T arr[], int left, int right)
@@ -275,7 +271,7 @@ namespace SortTestHelper{
 	void mergeSortBottomUp(T arr[],int n){
 		for(int sz=1;sz<=n; sz = 2*sz)
 		{
-			for(int i=0; i<n-1; i+=sz)
+			for(int i=0; i+sz<n; i+=sz)
 			{
 				if(i+sz-1<n)
 				{
@@ -291,6 +287,33 @@ namespace SortTestHelper{
 	}
 
 
+	template<typename T>
+	void __mergeSort2(T arr[],int startIndex,int endIndex){
+		assert(endIndex>=startIndex);
+		if(endIndex==startIndex) return;
+
+		if(endIndex-startIndex<=15)  //improve
+		{
+			insertSort(arr,startIndex,endIndex);
+			return;
+		}
+
+		int middle = int (endIndex+startIndex)/2;// 如果两个加数大于 int类型范围怎么办？？
+		if(endIndex-startIndex+1>2)
+		{
+			__mergeSort(arr,startIndex,middle);
+			__mergeSort(arr,middle+1,endIndex);
+			//mergeSort(arr,startIndex,endIndex);
+		}
+
+		if(arr[middle]<=arr[middle+1]) return;  //improved much for Nearly ordered arrays!!!
+		__merge(arr,startIndex,endIndex);
+
+	}
+	template<typename T>
+	void mergeSort(T arr[],int n){
+		__mergeSort2(arr,0,n-1);
+	}
 }
 
 
