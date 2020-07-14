@@ -231,7 +231,7 @@ namespace SortTestHelper{
 
 
 	template<typename T>
-	void __merge(T arr[], int left, int right)
+	void __merge(T arr[], int left, int middle,int right)
 	{
 		if(left>=right) return;
 		T* tmp = new T[right-left+1];
@@ -239,7 +239,7 @@ namespace SortTestHelper{
 		{
 			tmp[l-left] = arr[l];
 		}
-		int middle = (int)(left+right)/2;
+		//int middle = (int)(left+right)/2;
 		int l=left, r=middle+1;
 		for(int k=left;k<=right;k++)
 		{
@@ -269,20 +269,12 @@ namespace SortTestHelper{
 
 	template<typename T>
 	void mergeSortBottomUp(T arr[],int n){
-		for(int sz=1;sz<=n; sz = 2*sz)
+		for(int sz=1;sz<= n; sz +=sz)
 		{
-			for(int i=0; i+sz<n; i+=sz)
+			for(int i=0; i+sz<n; i+=sz+sz)
 			{
-				if(i+sz-1<n)
-				{
-					__merge(arr,i,i+sz-1);
-				}
-				else
-				{
-					__merge(arr,i,n-1);
-				}
+				__merge(arr,i,i+sz-1,min(i+sz+sz-1,n-1));
 			}
-
 		}
 	}
 
@@ -307,7 +299,7 @@ namespace SortTestHelper{
 		}
 
 		if(arr[middle]<=arr[middle+1]) return;  //improved much for Nearly ordered arrays!!!
-		__merge(arr,startIndex,endIndex);
+		__merge(arr,startIndex,(int)(endIndex+startIndex)/2,endIndex);
 
 	}
 	template<typename T>
